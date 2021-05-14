@@ -3,6 +3,7 @@ package org.launchcode.techjobs.console;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
+import org.w3c.dom.ls.LSOutput;
 
 import java.io.FileReader;
 import java.io.IOException;
@@ -37,7 +38,7 @@ public class JobData {
 
         for (HashMap<String, String> row : allJobs) {
             String aValue = row.get(field);
-
+//            System.out.println("This is aValue: " + aValue);
             if (!values.contains(aValue)) {
                 values.add(aValue);
             }
@@ -76,13 +77,32 @@ public class JobData {
 
             String aValue = row.get(column);
 
-            if (aValue.contains(value)) {
+            if (aValue.toLowerCase().contains(value)) {
                 jobs.add(row);
             }
         }
 
         return jobs;
     }
+
+    public static ArrayList<HashMap<String, String>> findByValue(String term) {
+
+        loadData();
+        ArrayList<HashMap<String, String>> anyJob = new ArrayList<>();
+
+        for (HashMap<String, String> job : allJobs) {
+            for (String field : job.values()) {
+                if (!anyJob.contains(job)) {
+                    if (field.toLowerCase().contains(term)) {
+                        anyJob.add(job);
+                    }
+                }
+            }
+        }
+
+        return anyJob;
+    }
+
 
     /**
      * Read in data from a CSV file and store it in a list
